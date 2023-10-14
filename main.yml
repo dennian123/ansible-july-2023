@@ -1,0 +1,30 @@
+- hosts: all
+  tasks:
+  #   # yum install httpd -y
+  # - name: install the latest version of Apache  #any name
+  #   yum:                #module. we using module yum is its a Linux package manager                 
+  #     name: httpd       #which package to install
+  #     state: latest     #version of httpd
+    #   # yum install httpd -y
+  - name: install the list of packages
+    yum:               
+      name:   #List of packages to be installed
+        - httpd
+        - wget
+        - vim
+        - tree
+      state: latest     
+  - name: Start service httpd, if not started
+    service:
+      name: httpd
+      state: started 
+      enabled: yes 
+  - name: Stop service httpd
+    service:
+      name: httpd
+      state: stopped   
+
+  # - name: remove the Apache package
+  #   yum:
+  #     name: httpd
+  #     state: absent
