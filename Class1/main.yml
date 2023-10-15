@@ -7,7 +7,7 @@
   #     state: latest     #version of httpd
     #   # yum install httpd -y
   - name: install the list of packages
-    yum:               
+    yum:      # yum install httpd... -y         
       name:   #List of packages to be installed
         - httpd
         - wget
@@ -15,7 +15,7 @@
         - tree
       state: latest     
   - name: Start service httpd, if not started
-    service:
+    service:  #systemctl start httpd
       name: httpd
       state: started 
       enabled: yes 
