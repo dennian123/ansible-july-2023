@@ -1,0 +1,22 @@
+- hosts: all
+  tasks:
+  - name: install packages
+    yum:
+      name: httpd
+      state: present  #Present - itstalled. Latest - install latest version. Default(not provided "state:") - present
+    notify: Restart httpd  #Use List for #of handlers
+  - name: install vim
+    yum:
+      name: vim
+      state: present
+    notify: Install tree  
+
+  handlers: 
+  - name: Restart httpd
+    service:
+      name: httpd
+      state: restarted     
+  - name : Install tree
+    yum:
+      name: tree
+      state: present 
