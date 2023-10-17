@@ -1,0 +1,14 @@
+
+#Test it first by printing a message
+- debug: 
+    msg: "Hello from CentOS"
+- name: Install Apache
+  yum:
+    name: httpd
+    state: present
+
+- name: Start service httpd
+  service:
+    name: httpd
+    state: started
+    enabled: yes

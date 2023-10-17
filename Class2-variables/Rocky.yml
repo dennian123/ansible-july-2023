@@ -1,0 +1,12 @@
+- debug:
+    msg: "Hello from Rocky"
+
+- name: Install Apache
+  dnf:       # dnf -package manager for Rocky Linux
+    name: httpd
+    state: present
+- name: Start service httpd
+  service:
+    name: httpd
+    state: started
+    enabled: yes

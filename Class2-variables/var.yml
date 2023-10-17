@@ -1,0 +1,11 @@
+#In Ansible there are 3 ways to declare variables(we can assign to list of packages to be installed):
+#-inside .yml file: ex: vars: name: dennis -> debug: msg="Hello {{name}}"
+#-in seperate forder: 
+#-in terminal: --extra-vars name=dennis file.yml. Replacing just for once
+
+- hosts: all
+  vars:        #providing variables inside .yml file
+    name: kaizen
+    team: DevOps
+  tasks: 
+  - debug: msg="Hello {{name}}, im a {{team}}" #prints a message for us. Its Python Language - variables {{varName}}. In Bash - $(varName)

@@ -1,0 +1,15 @@
+
+#Test it first by printing a message
+- debug: 
+    msg: "Hello from Ubuntu"
+- name: Install Apache2
+  apt:
+    name: apache2
+    state: present
+    update_cache: yes  #apt update FIRST on Debian family OS
+
+- name: Start Apache2
+  service:
+    name: apache2
+    state: started    #starting apache
+    enabled: yes      #enable apache
