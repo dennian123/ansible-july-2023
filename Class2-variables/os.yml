@@ -4,4 +4,5 @@
       msg: "OS is: {{ansible_os_family}},  Distro is: {{ansible_distribution}}"
 
   - name: Print OS
+    become: yes  #become: yes/true -> adding sudo in the front
     include_tasks: "{{ansible_distribution}}.yml"   #to run multiple .yml files(like in terraform - apply)
