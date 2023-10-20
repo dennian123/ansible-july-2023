@@ -1,0 +1,37 @@
+- name: install mariadb(MySQL), mariadb-server
+  yum:
+    name:
+    - mariadb
+    - mariadb-server
+    state: present
+
+- name: Start/Enable mariadb(MySQL) service
+  service:
+    name: mariadb
+    state: started
+    enabled: yes    
+
+# Create Database
+# - name: Create database  --> will not work as needs to 
+#   mysql_db:              -->  update Python, MySQL,VSC.
+#     name: wordpressdb    -->  Instead we will use 'shell'
+#     state: present    
+- name: Create database  #we have to log int firs to MySQL(be inside of the database)
+  shell: mysql -e "CREATE DATABASE if not exists wordpress;"  # use 'mysql -e "...;"' option for executing command inside MySQL
+  #check: SHOW DATABASES;
+
+- name: Check if user exists #test:* mysql -e "select 1 from mysql.user where user = 'kaizen';" | grep 1 -q
+  shell: mysql -e "select 1 from mysql.user where user = 'kaizen';" | grep 1 -q #use return code($?) here! 0 -> succ, 1# -> failed. Non 0 code produce error(playbook stops)
+  register: user_check #create variable for this task(register as what) so we can reuse it in condition
+  ignore_errors: yes  #ignor non 0 rc, move on(ignore error)
+
+- name: Create User/Password   #use return code after this task! to bypass error
+  shell: mysql -e "CREATE USER kaizen@localhost IDENTIFIED BY 'kaizen123';" #@localhost -> ..._hosts=VM1
+  when: user_check.rc !=0   #condition 'when:..' .0 is true if user exists(|grep 1)
+  #check: SELECT User, Host, Password FROM mysql.user;
+
+- name: Grant all privileges
+  shell: mysql -e "GRANT ALL PRIVILEGES ON wordpress.* TO kaizen@localhost IDENTIFIED BY 'kaizen123';"
+
+- name: Flush(restart) privileges
+  shell: mysql -e "FLUSH PRIVILEGES;"

@@ -1,3 +1,4 @@
+###PRE-REQUISITS FOR WORDPRESS
 # yum install httpd wget unzip epel-release mysql -y
 # yum install https://rpms.remirepo.net/enterprise/remi-release-7.rpm -y
 # yum-config-manager --enable remi-php74
@@ -11,15 +12,37 @@
 # setenforce 0
 # chown -R apache:apache /var/www/html/
 
+###CREATE, DEPLOY DATABASE(create user,pas for wordpress)
+# yum install mariadb(mySQL on CentOS) mariadb-server -y
+# systemctl start mariadb
+# systemctl enable mariadb
+
+# mysql -u root -p   -> log into MySQL
+# CREATE DATABASE wordpress;
+# CREATE USER wordpressuser@localhost IDENTIFIED BY 'password';
+# GRANT ALL PRIVILEGES ON wordpress.* TO wordpressuser@localhost IDENTIFIED BY 'password';
+# FLUSH PRIVILEGES;
+# exit               -> exit from MySQL
+
+# To Run Installation - on VM1 Copy Configuration Rules to:
+# *vi /var/www/html/wp-config.php
+# *curl ifconfig.co -> to get IP of VM in terminal
+
+
+
+
 - hosts: all
   vars:          #conditions in ansible. We create variable that going to use.
     php_version: 74
   tasks:
-  - name: Install Apache
-    include: apache.yml
-  - name: Instal other packages
-    include: packages.yml   
-  - name: Install php
-    include: php.yml  
-  - name: Install wordpress
-    include: wordpress.yml  
+  # - name: Install Apache
+  #   include: apache.yml
+  # - name: Instal other packages
+  #   include: packages.yml   
+  # - name: Install php
+  #   include: php.yml  
+  # - name: Install wordpress
+  #   include: wordpress.yml  
+
+  - name: Install/Start/Enable mariadb(MySQL) database
+    include: db.yml  
