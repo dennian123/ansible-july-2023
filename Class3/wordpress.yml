@@ -1,0 +1,27 @@
+- name: Download wordpress
+  get_url: 
+    url: https://wordpress.org/latest.tar.gz
+    dest: /tmp/wordpress.tar.gz  # ->/tmp/wordpress-7.5.3.tar.gz
+    #as its 'latest' v of wordpres it may change/update later.
+#so while unzipping - rename it, so later(when updating) do not have to guess version
+
+- name: Extract wordpress
+  unarchive:
+    src: /tmp/wordpress.tar.gz #remote_src: yes -> to make source fall on remote VM1
+    dest: /tmp                 #remote by defaul
+    remote_src: yes            #src: -> becomes remote
+
+- name: Copy file with owner and permissions
+  copy:
+    src: /tmp/wordpress/.  # *-> in Linux, .(current folder)->in Python
+    dest: /var/www/html
+    owner: apache  #chown -R apache:apache /var/www/html
+    group: apache  #chown -R apache:apache /var/www/html
+    mode: '755'    #chmod 755 file
+    remote_src: yes 
+
+#We need to restart Apache(as we did some changes)
+- name: Restart Apache
+  service:
+    name: httpd
+    state: restarted    

@@ -1,0 +1,25 @@
+# yum install httpd wget unzip epel-release mysql -y
+# yum install https://rpms.remirepo.net/enterprise/remi-release-7.rpm -y
+# yum-config-manager --enable remi-php74
+# yum install php -y
+# yum install php-mysql -y
+
+# wget https://wordpress.org/latest.tar.gz
+# tar -xf latest.tar.gz -C /var/www/html/
+# mv /var/www/html/wordpress/* /var/www/html/
+# getenforce
+# setenforce 0
+# chown -R apache:apache /var/www/html/
+
+- hosts: all
+  vars:          #conditions in ansible. We create variable that going to use.
+    php_version: 74
+  tasks:
+  - name: Install Apache
+    include: apache.yml
+  - name: Instal other packages
+    include: packages.yml   
+  - name: Install php
+    include: php.yml  
+  - name: Install wordpress
+    include: wordpress.yml  
