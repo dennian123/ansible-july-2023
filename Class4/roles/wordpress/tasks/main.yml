@@ -1,0 +1,36 @@
+- name: Download wordpress
+  get_url: 
+    url: "{{wordpress_url}}"
+    dest: "{{wordpress_dest}}"  # ->/tmp/wordpress-7.5.3.tar.gz
+    #as its 'latest' v of wordpres it may change/update later.
+    #Download and ReName at the same time, so later(when updating) do not have to guess version
+    #     wordpress-6.3.2.tar.gz -> wordpress.tar.gz
+
+- name: Extract wordpress
+  unarchive:
+    src: "{{wordpress_dest}}" #remote_src: yes -> to make source fall on remote VM1
+    dest: /tmp                 #remote by defaul
+    remote_src: yes            #src: -> becomes remote
+
+- name: Copy file with owner and permissions
+  copy:
+    src: /tmp/wordpress/.  # *-> in Linux, .(current folder)->in Python
+    dest: /var/www/html
+    owner: "{{user}}"  #chown -R apache:apache /var/www/html
+    group: "{{group}}"  #chown -R apache:apache /var/www/html
+    mode: '755'    #chmod 755 file
+    remote_src: yes 
+
+#Paste it before restat apache module, so we do not have to restart it againe
+- name: Template a file to /var/www/html
+  template:
+    src: wp-config.php.j2
+    dest: /var/www/html/wp-config.php #also rename it while copying to VM1
+
+#We need to restart Apache(as we did some changes)
+- name: Restart Apache
+  service:
+    name: httpd
+    state: restarted    
+
+# *curl ifconfig.co -> to get IP of VM in terminal 

@@ -1,0 +1,19 @@
+- name: Enable php 74   #wordpress need v74(default-v5.4)
+  shell: yum-config-manager --enable remi-php74  #shell commands will be always 'changed'
+  when: php_version == 74 #condition in ansible. when: (vars)true ->execute
+
+- name: Enable php 73 
+  shell: yum-config-manager --enable remi-php73 
+  when: php_version == 73
+
+- name: Enable php 72
+  shell: yum-config-manager --enable remi-php72 
+  when: php_version == 72  
+ 
+
+
+- name: Install php, php-mysql  #using list of packages
+  yum:
+    name: "{{packages_php}}"
+    state: present
+     

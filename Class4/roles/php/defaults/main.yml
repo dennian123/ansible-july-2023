@@ -1,0 +1,5 @@
+php_version: 74
+# Fol php packages we used vars folder - as we not planning to change it
+# packages_php:
+# - php
+# - php-mysql

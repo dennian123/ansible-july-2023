@@ -1,0 +1,4 @@
+- name: Install other packages #using variables to install list of packages
+  yum:
+    name: "{{packages}}"
+    state: present
