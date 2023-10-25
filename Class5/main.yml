@@ -1,0 +1,28 @@
+####Dynamic inventory
+
+#Change for #s of VM with less commends
+- hosts: all #<- will fail. Have to provide sudo below(for root user sudo is by default present)
+  become: true
+  tasks:
+  - hostname:
+      name: "{{inventory_hostname}}" #<-getting from hosts file
+
+  - debug: 
+      msg: "{{ansible_distribution}}"    
+  - name: Install Apache
+    include_tasks: "{{ansible_distribution}}.yml"    
+
+
+#Configuration for AWS
+# - hosts: aws1
+#   become: true  #to run with the sudo
+#   tasks:
+#   - hostname:
+#       name: aws1   
+# - hosts: aws2
+#   become: true  #to run with the sudo
+#   tasks:
+#   - hostname:
+#       name: aws2        
+
+

@@ -1,0 +1,9 @@
+- name: Install httpd
+  dnf:        #<- for amazon(yum,dnf depend on distro)
+    name: httpd
+    state: present
+- name: Start httpd
+  service:
+    name: httpd
+    state: started
+    enabled: yes
